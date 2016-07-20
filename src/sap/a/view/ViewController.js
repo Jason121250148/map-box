@@ -17,7 +17,7 @@ export default class ViewController extends ManagedObject
     }
 
     init()
-    {
+	{
 
     }
 
@@ -34,19 +34,20 @@ export default class ViewController extends ManagedObject
         }
     }
 
+
     getView()
     {
         return this.view;
     }
 
+
     createView(options)
     {
-        return new Error("CreateView(options) must be override in the derived class.");
+        throw new Error("createView(options) must be override in the derived class.");
     }
 
     initView()
     {
 
     }
-
 }
