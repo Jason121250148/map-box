@@ -23,8 +23,6 @@ export default class ViewController extends ManagedObject
 
     afterInit()
     {
-        // this._view = this.createView(this.getViewOptions());
-        // this.initView();
         this.view = this.createView(this.getViewOptions());
         if (this.view instanceof View)
         {
