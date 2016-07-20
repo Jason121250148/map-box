@@ -23,7 +23,7 @@ export default class TileLayer extends Layer
         }
     }
 
-    serOpacity(opacity)
+    setOpacity(opacity)
     {
         this.setProperty("opacity", opacity);
         this.container.setOpacity(opacity);
