@@ -1,5 +1,10 @@
 import Layer from "sap/a/map/layer/Layer";
-export default class ExampleLayer extends Layer
+
+import ServiceClient from "../../../gd/service/ServiceClient";
+
+import CoordinateConvert from "../../util/CoordinateConvert";
+
+export default class NaviLayer extends Layer
 {
     metadata = {
         properties: {
@@ -31,17 +36,18 @@ export default class ExampleLayer extends Layer
         this._updateEndMarker();
     }
 
-    drawRoute()
+    drawRoute(route)
     {
         this.routeGroup.clearLayers();
-        if (!this.route)
-        {
-            this.route = L.polyline([this.getStartLocation(), this.getEndLocation()]);
-            this.routeGroup.addLayer(this.route);
-        }
+        const paths = route.steps.map(step => {
+            return step.path.map(path => {
+                let lnglat = CoordinateConvert.getInstance().gcj02towgs84(path.lng, path.lat);
+                return [lnglat[1], lnglat[0]];
+            });
+        });
+        this.multiPolyline = L.multiPolyline(paths);
+        this.container.addLayer(this.multiPolyline);
     }
-
-
 
     _updateStartMarker()
     {
