@@ -68,7 +68,6 @@ export default class MapView extends View
 			doubleClickZoom: this.getAllowZoom()
         };
         this.map = L.map(this.$element[0], options);
-        // L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png").addTo(this.map);
     }
 
     setCenterLocation(centerLocation, zoom, options)
