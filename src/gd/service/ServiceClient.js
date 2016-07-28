@@ -23,9 +23,39 @@ export default class ServiceClient extends ManagedObject
 
     init()
     {
-        AMap.service( "AMap.Driving", (status, result) => {
+        AMap.service( ["AMap.Driving", "AMap.Autocomplete", "AMap.Geocoder"], (status, result) => {
+            this.autoComplete = new AMap.Autocomplete({
+                city: "南京市"
+            });
+            this.geocoder = new AMap.Geocoder({
+                radius: 1000,
+                extensions: "all"
+            });
+
             setTimeout(() => {
                 this.fireReady();
+            });
+        });
+    }
+
+    searchPoiAutoComplete(keyword)
+    {
+        return new Promise((resolve, reject) => {
+            this.autoComplete.search(keyword, (status, result) => {
+                if (status === "complete" && result.info === "OK")
+                {
+                    resolve(result.tips);
+                }
+                else if (status === "no_data") {
+                    resolve([]);
+                }
+                else
+                {
+                    reject({
+                        status,
+                        info: result.info
+                    });
+                }
             });
         });
     }
@@ -45,7 +75,10 @@ export default class ServiceClient extends ManagedObject
                     }
                     else
                     {
-                        reject(status);
+                        reject({
+                            status,
+                            info: result.info
+                        });
                     }
                 });
             });
@@ -55,7 +88,12 @@ export default class ServiceClient extends ManagedObject
 
     convert84toGcj02(locations)
     {
-        const locs = locations.map(loc => {
+        let arrLocations = locations;
+        if (!Array.isArray(locations))
+        {
+            arrLocations = [ locations ];
+        }
+        const locs = arrLocations.map(loc => {
             let latlng = L.latLng(loc);
             return [latlng.lng, latlng.lat];
         });
@@ -67,14 +105,31 @@ export default class ServiceClient extends ManagedObject
                 }
                 else
                 {
-                    reject(status);
+                    reject({
+                        status,
+                        info: result.info
+                    });
                 }
             });
         });
     }
 
-
-
-
-
+    doGeocoder(location)
+    {
+        return new Promise((resolve, reject) => {
+            this.geocoder.getAddress([ location.lng, location.lat ], (status, result) => {
+                if (status === "complete" && result.info === "OK")
+                {
+                    resolve(result);
+                }
+                else
+                {
+                    reject({
+                        status,
+                        info: result.info
+                    });
+                }
+            });
+        });
+    }
 }

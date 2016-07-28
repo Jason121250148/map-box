@@ -6,7 +6,10 @@ export default class ViewController extends ManagedObject
 {
     metadata = {
         properties: {
-            viewOptions: { type: "object" }
+            viewOptions: { type: "object" },
+        },
+        aggregations: {
+            childViewControllers: { type: "sap.a.view.ViewController" }
         }
     };
 
@@ -50,4 +53,34 @@ export default class ViewController extends ManagedObject
     {
 
     }
+
+    addViewController(viewController, $container)
+    {
+        this.addAggregation("childViewControllers", viewController);
+        this.view.addSubview(viewController.view, $container);
+        return this;
+    }
+
+    removeViewController(viewController, neverUseAgain = false)
+    {
+        const result = this.removeAggregation("childViewControllers", viewController);
+        if (result)
+        {
+            this.view.removeSubview(viewController, neverUseAgain);
+        }
+        return result;
+    }
+
+    removeAllViewControllers(neverUseAgain = false)
+    {
+        while (this.getChildViewControllers().length > 0) {
+            this.removeViewController(this.getChildViewControllers()[0], neverUseAgain);
+        }
+    }
+
+    removeFromParent()
+    {
+
+    }
+
 }

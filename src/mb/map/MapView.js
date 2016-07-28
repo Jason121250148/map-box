@@ -4,17 +4,24 @@ import TileLayer from "sap/a/map/layer/TileLayer";
 import ServiceClient from "../../gd/service/ServiceClient";
 
 import NaviLayer from "./layer/NaviLayer";
+import SelectedLayer from "./layer/SelectedLayer";
 
 export default class MapView extends AdaptiveMapView
 {
+    metadata = {
+        events: {
+            mapClicked: { parameters: { location: "object" } }
+        }
+    };
     afterInit()
     {
         super.afterInit();
         this.addStyleClass("mb-map-view");
-        this.initLayers();
+        this._initLayers();
+        this._initEvent();
     }
 
-    initLayers()
+    _initLayers()
     {
         this.tileLayer = new TileLayer({
             url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png"
@@ -22,18 +29,19 @@ export default class MapView extends AdaptiveMapView
         this.addLayer(this.tileLayer);
         this.naviLayer = new NaviLayer();
         this.addLayer(this.naviLayer);
-        // this.naviLayer.fitBounds();
+        this.selectedLayer = new SelectedLayer();
+        this.addLayer(this.selectedLayer);
     }
 
-    searchRoute(locations)
+    _initEvent()
     {
-        this.naviLayer.applySettings({
-            startLocation: locations[0],
-            endLocation: locations[1]
-        });
-        this.naviLayer.fitBounds();
-        ServiceClient.getInstance().searchRoute(locations).then(route => {
-            this.naviLayer.drawRoute(route);
+        this.map.on("click", this._map_click.bind(this));
+    }
+
+    _map_click(e)
+    {
+        this.fireMapClicked({
+            location: e.latlng
         });
     }
 }

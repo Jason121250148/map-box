@@ -51,7 +51,7 @@ export default class MapView extends View
     {
         super.afterInit()
         this._initMap();
-        this.initLayers();
+        this._initLayers();
     }
 
     _initMap()
