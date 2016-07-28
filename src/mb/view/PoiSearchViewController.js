@@ -14,9 +14,11 @@ export default class PoiSearchViewController extends ViewController
     }
     createView(options)
     {
-        return new PoiSearchView({
-            id: "mb-poi-search-view"
-        });
+        const opts = $.extend({
+            poi: "{/selectedPoi}",
+            queryPoi: "{/queryPoi}"
+        }, options);
+        return new PoiSearchView(opts);
     }
     initView()
     {
@@ -27,7 +29,8 @@ export default class PoiSearchViewController extends ViewController
     {
         this.view.attachInput(() => {
             ServiceClient.getInstance().searchPoiAutoComplete(this.view.getKeyword()).then(results => {
-                // console.log(result);
+                this.view.suggestionListView.setItems(results);
+                this.view.showSuggestion();
             });
         });
         this.view.attachEnter(() => {

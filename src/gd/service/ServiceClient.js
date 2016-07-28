@@ -41,22 +41,25 @@ export default class ServiceClient extends ManagedObject
     searchPoiAutoComplete(keyword)
     {
         return new Promise((resolve, reject) => {
-            this.autoComplete.search(keyword, (status, result) => {
-                if (status === "complete" && result.info === "OK")
-                {
-                    resolve(result.tips);
-                }
-                else if (status === "no_data") {
-                    resolve([]);
-                }
-                else
-                {
-                    reject({
-                        status,
-                        info: result.info
-                    });
-                }
-            });
+            if (keyword)
+            {
+                this.autoComplete.search(keyword, (status, result) => {
+                    if (status === "complete" && result.info === "OK")
+                    {
+                        resolve(result.tips);
+                    }
+                    else if (status === "no_data") {
+                        resolve([]);
+                    }
+                    else
+                    {
+                        reject({
+                            status,
+                            info: result.info
+                        });
+                    }
+                });
+            }
         });
     }
 

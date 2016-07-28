@@ -83,4 +83,13 @@ export default class ViewController extends ManagedObject
 
     }
 
+    setModel(model, name)
+    {
+        super.setModel(model);
+        if (this.view)
+        {
+            this.view.setModel(model, name);
+        }
+    }
+
 }

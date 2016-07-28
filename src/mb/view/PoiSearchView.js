@@ -1,11 +1,14 @@
 import View from "sap/a/view/View";
 
+import SuggestionListView from "./SuggestionListView";
 
 export default class PoiSearchView extends View
 {
     metadata = {
         properties: {
-            keyword: {  }
+            keyword: {  },
+            poi: { type: "object", bindable: true },
+            queryPoi: { type: "object", bindable: true }
         },
         events: {
             input: {  },
@@ -18,8 +21,30 @@ export default class PoiSearchView extends View
     {
         super.afterInit();
         this.addStyleClass("mb-poi-search-view");
-        this.initLayout();
-        let timeout = null
+        this._initLayout();
+        this._initEvent();
+
+        this._initSuggestionListView();
+    }
+
+    _initSuggestionListView()
+    {
+        this.suggestionListView = new SuggestionListView("mb-suggestion-list-view");
+        this.addSubview(this.suggestionListView);
+    }
+
+    _initLayout()
+    {
+        this.$input = $(`
+            <input class="search" type="search" placeholder="请输入搜索地址">
+        `);
+        this.$element.append(this.$input);
+
+    }
+
+    _initEvent()
+    {
+        let timeout = null;
         this.$input.on("input", () => {
             if (timeout)
             {
@@ -31,12 +56,9 @@ export default class PoiSearchView extends View
             }, 200);
         });
         this.$input.on("keydown", this._onEnter.bind(this));
-    }
 
-    initLayout()
-    {
-        this.$input = $(`<input class="search" type="search" placeholder="请输入搜索地址">`);
-        this.$element.append(this.$input);
+        this.$input.on("focus", this._onFocus.bind(this));
+        this.$input.on("blur", this._onBlur.bind(this));
     }
 
     _onEnter(e)
@@ -55,5 +77,54 @@ export default class PoiSearchView extends View
     setKeyword(value)
     {
         this.$input.val(value);
+    }
+
+    setPoi(poi)
+    {
+        this.setProperty("poi", poi);
+        if (poi)
+        {
+            this.setKeyword(poi.name);
+        }
+    }
+
+    setQueryPoi(queryPoi)
+    {
+        this.setProperty("queryPoi", queryPoi);
+        if (queryPoi)
+        {
+            this.setKeyword(queryPoi.name);
+        }
+    }
+
+    hideSuggestion()
+    {
+        this.suggestionListView.$element.hide();
+    }
+
+    showSuggestion()
+    {
+        this.suggestionListView.$element.show();
+    }
+
+    toggleSuggestion(shown)
+    {
+        if (shown)
+        {
+            this.showSuggestion();
+        }
+        else {
+            this.hideSuggestion();
+        }
+    }
+
+    _onFocus(e)
+    {
+        this.toggleSuggestion(this.getKeyword() && this.suggestionListView.getItems() && this.suggestionListView.getItems().length > 0);
+    }
+
+    _onBlur(e)
+    {
+        this.hideSuggestion();
     }
 }

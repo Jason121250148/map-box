@@ -9,6 +9,9 @@ import SelectedLayer from "./layer/SelectedLayer";
 export default class MapView extends AdaptiveMapView
 {
     metadata = {
+        properties: {
+            selectedPoi: { type: "object", bindable: true }
+        },
         events: {
             mapClicked: { parameters: { location: "object" } }
         }
@@ -29,7 +32,10 @@ export default class MapView extends AdaptiveMapView
         this.addLayer(this.tileLayer);
         this.naviLayer = new NaviLayer();
         this.addLayer(this.naviLayer);
-        this.selectedLayer = new SelectedLayer();
+        this.selectedLayer = new SelectedLayer({
+            selectedPoi: "{/selectedPoi}",
+            queryPoi: "{/queryPoi}"
+        });
         this.addLayer(this.selectedLayer);
     }
 
@@ -43,5 +49,14 @@ export default class MapView extends AdaptiveMapView
         this.fireMapClicked({
             location: e.latlng
         });
+    }
+
+    setSelectedPoi(poi)
+    {
+        this.setProperty("selectedPoi", poi);
+        if (poi)
+        {
+            this.setCenterLocation(poi.location);
+        }
     }
 }

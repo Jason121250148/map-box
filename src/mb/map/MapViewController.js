@@ -18,9 +18,10 @@ export default class MapViewController extends ViewController
     }
     createView(options)
     {
-        return new MapView({
-            id: "mb-map-view"
-        });
+        const opts = $.extend({
+            "selectedPoi": "{/selectedPoi}"
+        },options);
+        return new MapView(opts);
     }
     initView()
     {
@@ -35,7 +36,11 @@ export default class MapViewController extends ViewController
             const location = e.getParameter("location");
             // service.convert84toGcj02([ location.lng, location.lat ]).then(loc => {
                 service.doGeocoder(location).then(result => {
-                    sap.ui.getCore().getModel().setProperty("/queryPoi", { name: result.regeocode.formattedAddress });
+                    console.log(result);
+                    sap.ui.getCore().getModel().setProperty("/queryPoi", {
+                        name: result.regeocode.formattedAddress,
+                        location: location
+                    });
                 });
             // });
         });

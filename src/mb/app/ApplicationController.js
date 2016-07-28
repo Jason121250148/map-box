@@ -14,17 +14,19 @@ export default class ApplicationController extends AdaptiveApplicationController
     init()
     {
         super.init();
-        this._initModel();
     }
 
     _initModel()
     {
-        sap.ui.getCore().setModel(new Model());
+        const model = new Model();
+        sap.ui.getCore().setModel(model);
+        this.setModel(model);
     }
 
     afterInit()
     {
         super.afterInit();
+        this._initModel();
         this._initMapViewController();
         this._initPoiSearchViewController();
         this._initEvent();
@@ -44,17 +46,16 @@ export default class ApplicationController extends AdaptiveApplicationController
 
     _initEvent()
     {
-        sap.ui.getCore().getModel().bindProperty("/selectedPoi").attachChange(() => {
-            this.mapViewController.view.selectedLayer.updateMarker();
-            const selectedPoi = sap.ui.getCore().getModel().getProperty("/selectedPoi");
-            this.mapViewController.view.setCenterLocation(selectedPoi.location);
-            this.poiSearchViewController.view.setKeyword(selectedPoi.name);
-        });
+        // sap.ui.getCore().getModel().bindProperty("/selectedPoi").attachChange(() => {
+        //     // this.mapViewController.view.selectedLayer.updateMarker();
+        //     const selectedPoi = sap.ui.getCore().getModel().getProperty("/selectedPoi");
+        //     // this.mapViewController.view.setCenterLocation(selectedPoi.location);
+        // });
 
         sap.ui.getCore().getModel().bindProperty("/queryPoi").attachChange(() => {
             const name = sap.ui.getCore().getModel().getProperty("/queryPoi").name;
             this.poiSearchViewController.view.setKeyword(name);
-            this.mapViewController.view.updatePopup();
+            this.mapViewController.view.selectedLayer.updatePopup();
         });
 
 
@@ -68,7 +69,7 @@ export default class ApplicationController extends AdaptiveApplicationController
     run()
     {
         ServiceClient.getInstance().attachReady(() => {
-            this.mapViewController.searchRoute([ [32.04389, 118.77881], [31.9790247, 118.7548884] ]);
+            // this.mapViewController.searchRoute([ [32.04389, 118.77881], [31.9790247, 118.7548884] ]);
             this.mapViewController.searchPlace("丰盛商汇");
         });
 

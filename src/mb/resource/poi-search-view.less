@@ -1,16 +1,33 @@
-#mb-poi-search-view
+@poi-search-width: 300px;
+@poi-search-height:40px;
+
+.mb-poi-search-view
 {
     position: fixed;
     left: 50px;
     top: 30px;
-    width: 600px;
-    height: 30px;
+    width: @poi-search-width;
+    height: @poi-search-height;
 
     .search
     {
         display: inline-block;
         border: none;
-        width: 600px;
-        height: 30px;
+        width: @poi-search-width;
+        height: @poi-search-height;
+    }
+
+    #mb-suggestion-list-view
+    {
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        background: white;
+        li
+        {
+            line-height: @mb-list-item-height;
+            &:hover
+            {
+                background: @mb-selected-bg;
+            }
+        }
     }
 }
