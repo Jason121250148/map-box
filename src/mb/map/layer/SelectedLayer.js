@@ -40,15 +40,13 @@ export default class SelectedLayer extends Layer
         {
             if (!this.selectedPoiMarker)
             {
-                this.selectedPoiMarker = L.circleMarker(selectedPoi.location);
-                this.selectedPoiMarker.setRadius(10);
-                this.selectedPoiMarker.setStyle({
-                    color: "red",
-                    fillColor: "red",
-                    fillOpacity: 0.9
+                const myIcon = L.icon({
+                    iconUrl: 'vendor/leaflet/images/marker-icon.png',
+                    iconAnchor: [14, 34],
                 });
+                this.selectedPoiMarker = L.marker(selectedPoi.location);
+                this.selectedPoiMarker.setIcon(myIcon);
                 this.markerGroup.addLayer(this.selectedPoiMarker);
-                console.log(this.selectedPoiMarker);
             }
             else
             {
