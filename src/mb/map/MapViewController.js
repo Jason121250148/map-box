@@ -52,7 +52,7 @@ export default class MapViewController extends ViewController
         const service = ServiceClient.getInstance();
         const location = e.getParameter("location");
         service.doGeocoder(location).then(result => {
-            sap.ui.getCore().getModel().setProperty("/queryPoi", {
+            sap.ui.getCore().getModel().forceSetProperty("/queryPoi", {
                 name: result.regeocode.formattedAddress,
                 location: location
             });

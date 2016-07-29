@@ -95,6 +95,10 @@ export default class PoiSearchView extends View
         {
             this.setKeyword(poi.name);
         }
+        else
+        {
+            this.setKeyword("");
+        }
     }
 
     setQueryPoi(queryPoi)

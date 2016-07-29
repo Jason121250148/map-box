@@ -1,6 +1,6 @@
-import JSONModel from "sap/ui/model/json/JSONModel";
+import AdaptiveModel from "sap/a/model/Model";
 
-export default class Model extends JSONModel
+export default class Model extends AdaptiveModel
 {
     constructor(...args)
     {
