@@ -40,12 +40,16 @@ export default class PoiSearchView extends View
         `);
         this.$element.append(this.$input);
 
+        this.$searchIcon = $(`
+            <span class='icon iconfont icon-search'>
+        `);
+        this.$element.append(this.$searchIcon);
     }
 
     _initEvent()
     {
         let timeout = null;
-        this.$input.on("input", () => {
+        this.$input.on("input", (e) => {
             if (timeout)
             {
                 window.clearTimeout(timeout);
@@ -55,6 +59,7 @@ export default class PoiSearchView extends View
                 this.fireInput();
             }, 200);
         });
+        this.$searchIcon.on("click", this._onIconClick.bind(this));
         this.$input.on("keydown", this._onEnter.bind(this));
 
         this.$input.on("focus", this._onFocus.bind(this));
@@ -67,6 +72,11 @@ export default class PoiSearchView extends View
         {
             this.fireEnter();
         }
+    }
+
+    _onIconClick(e)
+    {
+        this.fireEnter();
     }
 
     getKeyword()

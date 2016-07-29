@@ -41,7 +41,7 @@ export default class SelectedLayer extends Layer
             if (!this.selectedPoiMarker)
             {
                 this.selectedPoiMarker = L.circleMarker(selectedPoi.location);
-                this.selectedPoiMarker.setRadius(5);
+                this.selectedPoiMarker.setRadius(10);
                 this.selectedPoiMarker.setStyle({
                     color: "red",
                     fillColor: "red",
@@ -58,6 +58,6 @@ export default class SelectedLayer extends Layer
         }
     }
 
-    
+
 
 }
