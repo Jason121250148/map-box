@@ -53,7 +53,7 @@ export default class ApplicationController extends AdaptiveApplicationController
     {
         ServiceClient.getInstance().attachReady(() => {
             // this.mapViewController.searchRoute([ [32.04389, 118.77881], [31.9790247, 118.7548884] ]);
-            this.mapViewController.searchPlace("丰盛商汇");
+            // this.mapViewController.searchPlace("丰盛商汇");
         });
 
     }

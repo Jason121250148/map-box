@@ -14,7 +14,7 @@ export default class MapView extends AdaptiveMapView
             queryPoi: { type: "object", bindable: true }
         },
         events: {
-            mapClicked: { parameters: { location: "object" } }
+            mapClick: { parameters: { location: "object" } }
         }
     };
     afterInit()
@@ -48,7 +48,7 @@ export default class MapView extends AdaptiveMapView
     {
         if (e.originalEvent.ctrlKey)
         {
-            this.fireMapClicked({
+            this.fireMapClick({
                 location: e.latlng
             });
         }
