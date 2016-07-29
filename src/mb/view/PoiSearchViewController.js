@@ -54,11 +54,11 @@ export default class PoiSearchViewController extends ViewController
     _onItemClick(e)
     {
         const item = e.getParameters().item;
-        const location = item.location;
+        const location = CoordinateConvert.getInstance().gcj02towgs84(item.location.lng, item.location.lat);
         const name = item.name;
         sap.ui.getCore().getModel().setProperty("/selectedPoi", {
             name: name,
-            location: [ location.lat, location.lng ]
+            location: [ location[1], location[0] ]
         });
     }
 }
