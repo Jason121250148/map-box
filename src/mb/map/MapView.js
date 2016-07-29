@@ -10,7 +10,8 @@ export default class MapView extends AdaptiveMapView
 {
     metadata = {
         properties: {
-            selectedPoi: { type: "object", bindable: true }
+            selectedPoi: { type: "object", bindable: true },
+            queryPoi: { type: "object", bindable: true }
         },
         events: {
             mapClicked: { parameters: { location: "object" } }
@@ -34,7 +35,6 @@ export default class MapView extends AdaptiveMapView
         this.addLayer(this.naviLayer);
         this.selectedLayer = new SelectedLayer({
             selectedPoi: "{/selectedPoi}",
-            queryPoi: "{/queryPoi}"
         });
         this.addLayer(this.selectedLayer);
     }
@@ -46,9 +46,12 @@ export default class MapView extends AdaptiveMapView
 
     _map_click(e)
     {
-        this.fireMapClicked({
-            location: e.latlng
-        });
+        if (e.originalEvent.ctrlKey)
+        {
+            this.fireMapClicked({
+                location: e.latlng
+            });
+        }
     }
 
     setSelectedPoi(poi)
@@ -57,6 +60,32 @@ export default class MapView extends AdaptiveMapView
         if (poi)
         {
             this.setCenterLocation(poi.location);
+        }
+    }
+
+    setQueryPoi(queryPoi)
+    {
+        this.setProperty("queryPoi", queryPoi);
+        if (queryPoi)
+        {
+            this.updatePopup();
+        }
+    }
+
+    updatePopup()
+    {
+        if (!this.clickPoiMarker)
+        {
+            this.clickPoiMarker = L.popup();
+            this.clickPoiMarker.setLatLng(this.getQueryPoi().location);
+            this.clickPoiMarker.setContent(this.getQueryPoi().name);
+            this.map.addLayer(this.clickPoiMarker);
+        }
+        else
+        {
+            this.clickPoiMarker.setLatLng(this.getQueryPoi().location);
+            this.clickPoiMarker.setContent(this.getQueryPoi().name);
+            this.map.addLayer(this.clickPoiMarker);
         }
     }
 }

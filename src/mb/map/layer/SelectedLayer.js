@@ -5,7 +5,6 @@ export default class SelectedLayer extends Layer
     metadata = {
         properties: {
             selectedPoi: { type: "object", bindable: true},
-            queryPoi: { type: "object", bindable: true }
         }
     };
 
@@ -59,20 +58,6 @@ export default class SelectedLayer extends Layer
         }
     }
 
-    updatePopup()
-    {
-        if (!this.clickPoiMarker)
-        {
-            this.clickPoiMarker = L.popup();
-            this.clickPoiMarker.setLatLng(this.getQueryPoi().location);
-            this.clickPoiMarker.setContent(this.getQueryPoi().name);
-            this.markerGroup.addLayer(this.clickPoiMarker);
-        }
-        else
-        {
-            this.clickPoiMarker.setLatLng(this.getQueryPoi().location);
-            this.markerGroup.addLayer(this.clickPoiMarker);
-        }
-    }
+    
 
 }

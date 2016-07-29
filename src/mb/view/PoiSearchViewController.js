@@ -27,13 +27,13 @@ export default class PoiSearchViewController extends ViewController
     }
     _initEvent()
     {
-        this.view.attachInput(() => {
+        this.view.attachInput((e) => {
             ServiceClient.getInstance().searchPoiAutoComplete(this.view.getKeyword()).then(results => {
                 this.view.suggestionListView.setItems(results);
                 this.view.showSuggestion();
             });
         });
-        this.view.attachEnter(() => {
+        this.view.attachEnter((e) => {
             ServiceClient.getInstance().searchPoiAutoComplete(this.view.getKeyword()).then(results => {
                 const result = results[0];
                 const location = CoordinateConvert.getInstance().gcj02towgs84(result.location.lng, result.location.lat);
@@ -41,6 +41,15 @@ export default class PoiSearchViewController extends ViewController
                     name: result.name,
                     location: [ location[1], location[0] ]
                 });
+            });
+        });
+        this.view.suggestionListView.attachItemClick((e) => {
+            const item = e.getParameters().item;
+            const location = item.location;
+            const name = item.name;
+            sap.ui.getCore().getModel().setProperty("/selectedPoi", {
+                name: name,
+                location: [ location.lat, location.lng ]
             });
         });
 

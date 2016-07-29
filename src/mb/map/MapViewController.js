@@ -19,7 +19,8 @@ export default class MapViewController extends ViewController
     createView(options)
     {
         const opts = $.extend({
-            "selectedPoi": "{/selectedPoi}"
+            "selectedPoi": "{/selectedPoi}",
+            "queryPoi": "{/queryPoi}"
         },options);
         return new MapView(opts);
     }
@@ -36,7 +37,6 @@ export default class MapViewController extends ViewController
             const location = e.getParameter("location");
             // service.convert84toGcj02([ location.lng, location.lat ]).then(loc => {
                 service.doGeocoder(location).then(result => {
-                    console.log(result);
                     sap.ui.getCore().getModel().setProperty("/queryPoi", {
                         name: result.regeocode.formattedAddress,
                         location: location

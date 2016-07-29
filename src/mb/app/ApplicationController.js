@@ -29,7 +29,6 @@ export default class ApplicationController extends AdaptiveApplicationController
         this._initModel();
         this._initMapViewController();
         this._initPoiSearchViewController();
-        this._initEvent();
     }
 
     _initMapViewController()
@@ -44,22 +43,6 @@ export default class ApplicationController extends AdaptiveApplicationController
         this.addViewController(this.poiSearchViewController);
     }
 
-    _initEvent()
-    {
-        // sap.ui.getCore().getModel().bindProperty("/selectedPoi").attachChange(() => {
-        //     // this.mapViewController.view.selectedLayer.updateMarker();
-        //     const selectedPoi = sap.ui.getCore().getModel().getProperty("/selectedPoi");
-        //     // this.mapViewController.view.setCenterLocation(selectedPoi.location);
-        // });
-
-        sap.ui.getCore().getModel().bindProperty("/queryPoi").attachChange(() => {
-            const name = sap.ui.getCore().getModel().getProperty("/queryPoi").name;
-            this.poiSearchViewController.view.setKeyword(name);
-            this.mapViewController.view.selectedLayer.updatePopup();
-        });
-
-
-    }
 
     createView(options)
     {
