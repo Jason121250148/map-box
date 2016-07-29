@@ -92,7 +92,7 @@ export default class ServiceClient extends ManagedObject
     convert84toGcj02(locations)
     {
         let arrLocations = locations;
-        if (!Array.isArray(locations))
+        if (locations.length > 0 && !Array.isArray(locations[0]))
         {
             arrLocations = [ locations ];
         }
@@ -119,17 +119,22 @@ export default class ServiceClient extends ManagedObject
 
     doGeocoder(location)
     {
-        return new Promise((resolve, reject) => {
-            this.geocoder.getAddress([ location.lng, location.lat ], (status, result) => {
-                if (status === "complete" && result.info === "OK")
+        return this.convert84toGcj02([ location.lat, location.lng ]).then(loc => {
+            return new Promise((resolve, reject) => {
+                if (loc.length > 0)
                 {
-                    resolve(result);
-                }
-                else
-                {
-                    reject({
-                        status,
-                        info: result.info
+                    this.geocoder.getAddress([ loc[0].lng, loc[0].lat ], (status, result) => {
+                        if (status === "complete" && result.info === "OK")
+                        {
+                            resolve(result);
+                        }
+                        else
+                        {
+                            reject({
+                                status,
+                                info: result.info
+                            });
+                        }
                     });
                 }
             });
