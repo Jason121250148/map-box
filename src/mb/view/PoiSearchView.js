@@ -6,7 +6,6 @@ export default class PoiSearchView extends View
 {
     metadata = {
         properties: {
-            keyword: {  },
             poi: { type: "object", bindable: true },
             queryPoi: { type: "object", bindable: true }
         },
