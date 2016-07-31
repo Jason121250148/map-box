@@ -10,7 +10,6 @@ export default class MapView extends AdaptiveMapView
 {
     metadata = {
         properties: {
-            selectedPoi: { type: "object", bindable: true },
             queryPoi: { type: "object", bindable: true }
         },
         events: {
@@ -31,7 +30,10 @@ export default class MapView extends AdaptiveMapView
             url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png"
         });
         this.addLayer(this.tileLayer);
-        this.naviLayer = new NaviLayer();
+        this.naviLayer = new NaviLayer({
+            startPoi: "{/startPoi}",
+            endPoi: "{/endPoi}"
+        });
         this.addLayer(this.naviLayer);
         this.selectedLayer = new SelectedLayer({
             selectedPoi: "{/selectedPoi}",
@@ -69,6 +71,7 @@ export default class MapView extends AdaptiveMapView
         if (queryPoi)
         {
             this.updatePopup();
+            console.log(queryPoi);
         }
     }
 
@@ -88,4 +91,5 @@ export default class MapView extends AdaptiveMapView
             this.map.addLayer(this.clickPoiMarker);
         }
     }
+
 }

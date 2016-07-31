@@ -5,7 +5,8 @@ export default class Model extends AdaptiveModel
     constructor(...args)
     {
         super({
-            selectedPoi: null,
+            startPoi: null,
+            endPoi: null,
             queryPoi: null
         });
     }

@@ -19,8 +19,9 @@ export default class MapViewController extends ViewController
     createView(options)
     {
         const opts = $.extend({
-            "selectedPoi": "{/selectedPoi}",
-            "queryPoi": "{/queryPoi}"
+            // "startPoi": "{/startPoi}",
+            // "endPoi": "{/endPoi}",
+            queryPoi: "{/queryPoi}"
         },options);
         return new MapView(opts);
     }
