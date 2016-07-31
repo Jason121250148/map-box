@@ -8,8 +8,8 @@ export default class NaviLayer extends Layer
 {
     metadata = {
         properties: {
-            startLocation: { type: "any" },
-            endLocation: { type: "any" }
+            startPoi: { type: "object", bindable: true },
+            endPoi: { type: "object", bindable: true },
         }
     };
 
@@ -22,17 +22,15 @@ export default class NaviLayer extends Layer
         this.container.addLayer(this.routeGroup);
     }
 
-    setStartLocation(location)
+    setStartPoi(startPoi)
     {
-        const loc = L.latLng(location);
-        this.setProperty("startLocation", loc);
+        this.setProperty("startPoi", startPoi);
         this._updateStartMarker();
     }
 
-    setEndLocation(location)
+    setEndPoi(endPoi)
     {
-        const loc = L.latLng(location);
-        this.setProperty("endLocation", loc);
+        this.setProperty("endPoi", endPoi);
         this._updateEndMarker();
     }
 
@@ -46,46 +44,54 @@ export default class NaviLayer extends Layer
             });
         });
         this.multiPolyline = L.multiPolyline(paths);
-        this.container.addLayer(this.multiPolyline);
+        this.routeGroup.addLayer(this.multiPolyline);
     }
 
     _updateStartMarker()
     {
-        if (!this.startMarker)
+        if (this.getStartPoi())
         {
-            this.startMarker = L.circleMarker(this.getStartLocation());
-            this.startMarker.setStyle({
-                color: "green",
-                opacity: 0.8,
-                fillColor: "green",
-                fillOpacity: 0.8
-            });
-            this.startMarker.setRadius(5);
-            this.markerGroup.addLayer(this.startMarker);
-        }
-        else
-        {
-            this.startMarker.setLatLng(this.getStartLocation());
+            const location = L.latLng(this.getStartPoi().location);
+            if (!this.startMarker)
+            {
+                this.startMarker = L.circleMarker(location);
+                this.startMarker.setStyle({
+                    color: "green",
+                    opacity: 0.8,
+                    fillColor: "green",
+                    fillOpacity: 0.8
+                });
+                this.startMarker.setRadius(5);
+                this.markerGroup.addLayer(this.startMarker);
+            }
+            else
+            {
+                this.startMarker.setLatLng(location);
+            }
         }
     }
 
     _updateEndMarker()
     {
-        if (!this.endMarker)
+        if (this.getEndPoi())
         {
-            this.endMarker = L.circleMarker(this.getEndLocation());
-            this.endMarker.setStyle({
-                color: "red",
-                opacity: 0.8,
-                fillColor: "red",
-                fillOpacity: 0.8
-            });
-            this.endMarker.setRadius(5);
-            this.markerGroup.addLayer(this.endMarker);
-        }
-        else
-        {
-            this.endMarker.setLatLng(this.getEndLocation());
+            const location = L.latLng(this.getEndPoi().location);
+            if (!this.endMarker)
+            {
+                this.endMarker = L.circleMarker(location);
+                this.endMarker.setStyle({
+                    color: "red",
+                    opacity: 0.8,
+                    fillColor: "red",
+                    fillOpacity: 0.8
+                });
+                this.endMarker.setRadius(5);
+                this.markerGroup.addLayer(this.endMarker);
+            }
+            else
+            {
+                this.endMarker.setLatLng(location);
+            }
         }
     }
 }

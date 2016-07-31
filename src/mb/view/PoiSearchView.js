@@ -6,8 +6,8 @@ export default class PoiSearchView extends View
 {
     metadata = {
         properties: {
-            poi: { type: "object", bindable: true },
-            queryPoi: { type: "object", bindable: true }
+            selectedPoi: { type: "object", bindable: true },
+            content: { type: "string" }
         },
         events: {
             input: {  },
@@ -35,14 +35,14 @@ export default class PoiSearchView extends View
     _initLayout()
     {
         this.$input = $(`
-            <input class="search" type="search" placeholder="请输入搜索地址">
+            <input class="search" type="search" placeholder="${this.getProperty("content")}">
         `);
         this.$element.append(this.$input);
 
-        this.$searchIcon = $(`
-            <span class='icon iconfont icon-search'>
-        `);
-        this.$element.append(this.$searchIcon);
+        // this.$searchIcon = $(`
+        //     <span class='icon iconfont icon-search'>
+        // `);
+        // this.$element.append(this.$searchIcon);
     }
 
     _initEvent()
@@ -58,7 +58,7 @@ export default class PoiSearchView extends View
                 this.fireInput();
             }, 200);
         });
-        this.$searchIcon.on("click", this._onIconClick.bind(this));
+        // this.$searchIcon.on("click", this._onIconClick.bind(this));
         this.$input.on("keydown", this._onEnter.bind(this));
 
         this.$input.on("focus", this._onFocus.bind(this));
@@ -88,25 +88,16 @@ export default class PoiSearchView extends View
         this.$input.val(value);
     }
 
-    setPoi(poi)
+    setSelectedPoi(selectedPoi)
     {
-        this.setProperty("poi", poi);
-        if (poi)
+        this.setProperty("selectedPoi", selectedPoi);
+        if (selectedPoi)
         {
-            this.setKeyword(poi.name);
+            this.setKeyword(selectedPoi.name);
         }
         else
         {
             this.setKeyword("");
-        }
-    }
-
-    setQueryPoi(queryPoi)
-    {
-        this.setProperty("queryPoi", queryPoi);
-        if (queryPoi)
-        {
-            this.setKeyword(queryPoi.name);
         }
     }
 

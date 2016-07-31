@@ -14,11 +14,7 @@ export default class PoiSearchViewController extends ViewController
     }
     createView(options)
     {
-        const opts = $.extend({
-            poi: "{/selectedPoi}",
-            queryPoi: "{/queryPoi}"
-        }, options);
-        return new PoiSearchView(opts);
+        return new PoiSearchView(options);
     }
     initView()
     {
@@ -44,7 +40,11 @@ export default class PoiSearchViewController extends ViewController
         ServiceClient.getInstance().searchPoiAutoComplete(this.view.getKeyword()).then(results => {
             const result = results[0];
             const location = CoordinateConvert.getInstance().gcj02towgs84(result.location.lng, result.location.lat);
-            sap.ui.getCore().getModel().forceSetProperty("/selectedPoi", {
+            // sap.ui.getCore().getModel().forceSetProperty("/selectedPoi", {
+            //     name: result.name,
+            //     location: [ location[1], location[0] ]
+            // });
+            this.view.setSelectedPoi({
                 name: result.name,
                 location: [ location[1], location[0] ]
             });
@@ -56,9 +56,12 @@ export default class PoiSearchViewController extends ViewController
         const item = e.getParameters().item;
         const location = CoordinateConvert.getInstance().gcj02towgs84(item.location.lng, item.location.lat);
         const name = item.name;
-        sap.ui.getCore().getModel().forceSetProperty("/selectedPoi", {
-            name: name,
-            location: [ location[1], location[0] ]
+        // sap.ui.getCore().getModel().forceSetProperty("/selectedPoi", {
+        // });
+        this.view.setSelectedPoi({
+                name: name,
+                location: [ location[1], location[0] ]
         });
     }
+
 }
